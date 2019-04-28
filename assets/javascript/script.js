@@ -6,7 +6,7 @@ var buttonsDiv = $("#buttons");
 var addGIFButton = $("#add-gif");
 var userEnteredTopic = $("#topic-input");
 
-// Function for displaying movie data
+// Function for displaying super hero buttons
 function renderButtons() {
   buttonsDiv.empty();
   for (var i = 0; i < topics.length; i++) {
@@ -18,7 +18,7 @@ function renderButtons() {
   }
 }
 
-// This function handles events where one button is clicked
+// this adds the user entered topic to the topics array
 addGIFButton.on("click", function () {
   event.preventDefault();
   var topic = userEnteredTopic.val().trim();
@@ -27,7 +27,7 @@ addGIFButton.on("click", function () {
   renderButtons();
 });
 
-// grab topic from user choise
+// This calls the API to get the gif upon user clicking a button
 $(document).on("click", ".gif-button", function () {
   var currentTopic = $(this).attr("data-name");
   var apiKey = "t96GtYlvYbboFox2HkQ71NeemLbAHcQr";
@@ -42,25 +42,42 @@ $(document).on("click", ".gif-button", function () {
 
     for (var i = 0; i < results.length; i++) {
 
-      console.log(results[i].images)
-    //   <div class="card" style="width: 18rem;">
-    // </div>
-      var gifCard = $("<div>", { class: "card mt-25 mb-25" });
-      var gifImage = $("<img>", { class: "card-img-top", src: results[i].images.fixed_height.url });
-      var gifDiv = $("<div>", { class: "card-body" });
-      var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + results[i].rating });
- 
-      rating.appendTo(gifDiv);
-      gifDiv.appendTo(gifCard)
-      gifImage.appendTo(gifCard);
-      // gifDiv.prependTo("#gifs-view");
+      var stillImage = results[i].images.original_still.url;
+      var movingImage = results[i].images.fixed_height.url;
+      var rating = results[i].rating;
+      var title = results[i].title;
 
+      var gifCard = $("<div>", { class: "card mt-25 mb-25" });
+      var gifImage = $("<img>").addClass("card-img-bottom gif")
+      .attr("src", stillImage)
+      .attr("data-state", "still")
+      .attr("data-still", stillImage)
+      .attr("data-animate", movingImage);
+      var gifDiv = $("<div>", { class: "card-body" });
+      var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
+      var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
+
+      rating.appendTo(gifDiv);
+      title.appendTo(gifDiv);
+      gifImage.appendTo(gifCard);
+      gifDiv.appendTo(gifCard)
       $("#gif-view").prepend(gifCard);
     }
-
   });
 });
 
+// this will change the gif state when user clicks it
+$(document).on("click", ".gif", function () {
+  var state = $(this).attr("data-state");
 
-// Calling the renderButtons function to display the initial list of movies
+  if (state === "still") {
+    $(this).attr("src", $(this).attr("data-animate"));
+    $(this).attr("data-state", "animate");
+  } else {
+    $(this).attr("src", $(this).attr("data-still"));
+    $(this).attr("data-state", "still");
+  }
+});
+
+// this calls the function that will render the buttons
 renderButtons();
