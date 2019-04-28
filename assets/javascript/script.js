@@ -43,16 +43,19 @@ $(document).on("click", ".gif-button", function () {
     for (var i = 0; i < results.length; i++) {
 
       console.log(results[i].images)
-      var gifDiv = $("<div>");
-      var rating = $("<p>", { text: "GIF Rating: " + results[i].rating});
-      var gifImage = $("<img>", { src: results[i].images.original_still.url });
+    //   <div class="card" style="width: 18rem;">
+    // </div>
+      var gifCard = $("<div>", { class: "card mt-25 mb-25" });
+      var gifImage = $("<img>", { class: "card-img-top", src: results[i].images.fixed_height.url });
+      var gifDiv = $("<div>", { class: "card-body" });
+      var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + results[i].rating });
+ 
+      rating.appendTo(gifDiv);
+      gifDiv.appendTo(gifCard)
+      gifImage.appendTo(gifCard);
+      // gifDiv.prependTo("#gifs-view");
 
-      // results[i].images.fixed_height.url 
-      gifDiv.append(rating);
-      gifDiv.append(gifImage);
-      gifDiv.prependTo("#gifs-view");
-
-      $("#gif-view").prepend(gifDiv);
+      $("#gif-view").prepend(gifCard);
     }
 
   });

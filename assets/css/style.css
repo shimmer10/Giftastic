@@ -1,6 +1,10 @@
 body {
-    /* background-color: darkslategray; */
+    /* background: darkslategray; */
     background-image: url("../images/ironMan.jpg");
-    background-repeat: no-repeat;
     background-size: auto;
+}
+.card {
+    width: 18rem;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
