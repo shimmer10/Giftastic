@@ -1,8 +1,8 @@
 body {
-    /* background: darkslategray; */
-    background-image: url("../images/ironMan.jpg");
+    background-image: url("../images/background.jpg");
     background-size: auto;
 }
+
 .card {
     width: 18rem;
     margin-top: 25px;
@@ -10,4 +10,23 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+.gif-button {
+    margin: 5px;
+}
+#favorites {
+    text-align: center;
+}
+#gif-form {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    align-content: left;
+    width: 50%;
+}
+#submit {
+    margin: 10px;
+}
+#topic-input {
+    text-align: center;
+    margin-left: 10px;
 }

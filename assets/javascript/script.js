@@ -3,7 +3,7 @@ var topics = ["Captain Marvel", "Captain America", "Black Widow", "Scarlett Witc
 
 // variables
 var buttonsDiv = $("#buttons");
-var addGIFButton = $("#add-gif");
+var addGIFButton = $("#submit");
 var userEnteredTopic = $("#topic-input");
 
 // Function for displaying super hero buttons
@@ -56,11 +56,14 @@ $(document).on("click", ".gif-button", function () {
       var gifDiv = $("<div>", { class: "card-body" });
       var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
       var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
+      var favoriteButton = $("<button>").addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty")
+      .attr("id", "favorite");
 
       rating.appendTo(gifDiv);
       title.appendTo(gifDiv);
+      favoriteButton.appendTo(gifCard);
       gifImage.appendTo(gifCard);
-      gifDiv.appendTo(gifCard)
+      gifDiv.appendTo(gifCard);
       $("#gif-view").prepend(gifCard);
     }
   });
@@ -78,6 +81,13 @@ $(document).on("click", ".gif", function () {
     $(this).attr("data-state", "still");
   }
 });
+
+// allow the user to pick favorites
+$(document).on("click", "#favorite", function () {
+    $(this).removeAttr("class", "glyphicon-star-empty");
+    $(this).addClass("btn btn-default btn-lg glyphicon glyphicon-star")
+});
+
 
 // this calls the function that will render the buttons
 renderButtons();
