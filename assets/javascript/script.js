@@ -23,6 +23,7 @@ addGIFButton.on("click", function () {
   event.preventDefault();
   var topic = userEnteredTopic.val().trim();
   topics.push(topic);
+  userEnteredTopic.val("");
 
   renderButtons();
 });
@@ -41,31 +42,8 @@ $(document).on("click", ".gif-button", function () {
     var results = response.data;
 
     for (var i = 0; i < results.length; i++) {
-
-      var stillImage = results[i].images.original_still.url;
-      var movingImage = results[i].images.fixed_height.url;
-      var rating = results[i].rating;
-      var title = results[i].title;
-
-      var gifCard = $("<div>", { class: "card mt-25 mb-25" });
-      var gifImage = $("<img>").addClass("card-img-bottom gif")
-      .attr("src", stillImage)
-      .attr("data-state", "still")
-      .attr("data-still", stillImage)
-      .attr("data-animate", movingImage);
-      var gifDiv = $("<div>", { class: "card-body" });
-      var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
-      var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
-      var favoriteButton = $("<button>").addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
-      .attr("id", "favorite")
-      .attr("data-state", "empty");
-
-      rating.appendTo(gifDiv);
-      title.appendTo(gifDiv);
-      favoriteButton.appendTo(gifCard);
-      gifImage.appendTo(gifCard);
-      gifDiv.appendTo(gifCard);
-      $("#gif-view").prepend(gifCard);
+      var currentGif = results[i];
+      buildGifCards(currentGif);
     }
   });
 });
@@ -98,6 +76,35 @@ $(document).on("click", "#favorite", function () {
   }
 });
 
+function buildGifCards(currentGif) {
+
+  var stillImage = currentGif.images.original_still.url;
+  var movingImage = currentGif.images.fixed_height.url;
+  var rating = currentGif.rating;
+  var title = currentGif.title;
+
+  var columnDiv = $("<div/>", { class: "col-lg-6" });
+  var favoriteButton = $("<button>").addClass("card-header btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
+  .attr("id", "favorite")
+  .attr("data-state", "empty");
+  var gifCard = $("<div>", { class: "card mt-25 mb-25" });
+  var gifImage = $("<img>").addClass("card-img-bottom gif")
+  .attr("src", stillImage)
+  .attr("data-state", "still")
+  .attr("data-still", stillImage)
+  .attr("data-animate", movingImage);
+  var gifDiv = $("<div>", { class: "card-body" });
+  var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
+  var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
+
+  rating.appendTo(gifDiv);
+  title.appendTo(gifDiv);
+  favoriteButton.appendTo(gifCard);
+  gifImage.appendTo(gifCard);
+  gifDiv.appendTo(gifCard);
+  gifCard.appendTo(columnDiv)
+  $("#gif-view").prepend(columnDiv);
+}
 
 // this calls the function that will render the buttons
 renderButtons();

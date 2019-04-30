@@ -2,17 +2,19 @@ body {
     background-image: url("../images/background.jpg");
     background-size: auto;
 }
-
 .card {
-    width: 18rem;
     margin-top: 25px;
     margin-bottom: 25px;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+    width: 36rem;
 }
 .gif-button {
     margin: 5px;
+}
+.jumbotron {
+    background-image: url("../images/Superhero\ GIF\ Generator\ Banner.png");
+    height: 195px;
 }
 #favorites {
     text-align: center;
