@@ -56,8 +56,9 @@ $(document).on("click", ".gif-button", function () {
       var gifDiv = $("<div>", { class: "card-body" });
       var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
       var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
-      var favoriteButton = $("<button>").addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty")
-      .attr("id", "favorite");
+      var favoriteButton = $("<button>").addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
+      .attr("id", "favorite")
+      .attr("data-state", "empty");
 
       rating.appendTo(gifDiv);
       title.appendTo(gifDiv);
@@ -84,8 +85,17 @@ $(document).on("click", ".gif", function () {
 
 // allow the user to pick favorites
 $(document).on("click", "#favorite", function () {
+  var state = $(this).attr("data-state");
+
+  if (state === "empty") {
     $(this).removeAttr("class", "glyphicon-star-empty");
     $(this).addClass("btn btn-default btn-lg glyphicon glyphicon-star")
+    $(this).attr("data-state", "filled");
+  } else {
+    $(this).removeAttr("class", "glyphicon-star");
+    $(this).addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty")
+    $(this).attr("data-state", "empty");
+  }
 });
 
 
