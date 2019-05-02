@@ -1,10 +1,13 @@
 // Initial array of topics
 var topics = ["Captain Marvel", "Captain America", "Black Widow", "Scarlett Witch", "Thor", "Iron Man", "Ant Man", "Black Panther"];
+var favoritesArray =[];
 
 // variables
 var buttonsDiv = $("#buttons");
 var addGIFButton = $("#submit");
 var userEnteredTopic = $("#topic-input");
+var gifView = $("#gif-view");
+var favoritesDiv = $(".favorites");
 
 // Function for displaying super hero buttons
 function renderButtons() {
@@ -62,18 +65,22 @@ $(document).on("click", ".gif", function () {
 });
 
 // allow the user to pick favorites
-$(document).on("click", "#favorite", function () {
+$(document).on("click", ".favorite", function () {
   var state = $(this).attr("data-state");
+  var chosenGIF = $(this).attr("id");
 
   if (state === "empty") {
     $(this).removeAttr("class", "glyphicon-star-empty");
-    $(this).addClass("btn btn-default btn-lg glyphicon glyphicon-star")
+    $(this).addClass("favorite btn btn-default btn-lg glyphicon glyphicon-star")
     $(this).attr("data-state", "filled");
+    addToFavorites(chosenGIF);
   } else {
     $(this).removeAttr("class", "glyphicon-star");
-    $(this).addClass("btn btn-default btn-lg glyphicon glyphicon-star-empty")
+    $(this).addClass("favorite btn btn-default btn-lg glyphicon glyphicon-star-empty")
     $(this).attr("data-state", "empty");
+    removeFromFavorites(chosenGIF);
   }
+  
 });
 
 function buildGifCards(currentGif) {
@@ -82,17 +89,18 @@ function buildGifCards(currentGif) {
   var movingImage = currentGif.images.fixed_height.url;
   var rating = currentGif.rating;
   var title = currentGif.title;
+  var id = currentGif.id;
 
   var columnDiv = $("<div/>", { class: "col-lg-6" });
-  var favoriteButton = $("<button>").addClass("card-header btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
-  .attr("id", "favorite")
-  .attr("data-state", "empty");
+  var favoriteButton = $("<button>").addClass("favorite card-header btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
+    .attr("id", movingImage + " " + id)
+    .attr("data-state", "empty");
   var gifCard = $("<div>", { class: "card mt-25 mb-25" });
   var gifImage = $("<img>").addClass("card-img-bottom gif")
-  .attr("src", stillImage)
-  .attr("data-state", "still")
-  .attr("data-still", stillImage)
-  .attr("data-animate", movingImage);
+    .attr("src", stillImage)
+    .attr("data-state", "still")
+    .attr("data-still", stillImage)
+    .attr("data-animate", movingImage);
   var gifDiv = $("<div>", { class: "card-body" });
   var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
   var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
@@ -103,7 +111,30 @@ function buildGifCards(currentGif) {
   gifImage.appendTo(gifCard);
   gifDiv.appendTo(gifCard);
   gifCard.appendTo(columnDiv)
-  $("#gif-view").prepend(columnDiv);
+  gifView.prepend(columnDiv);
+}
+
+function addToFavorites(chosenGIF) {
+  var display = chosenGIF.split(" ")[0];
+  var id = chosenGIF.split(" ")[1];
+
+  if(!favoritesArray.includes(display)) {
+    favoritesArray.push(display)
+    var favorite = $("<p>", { id: id, text: display })
+    favoritesDiv.append(favorite)
+  }
+}
+
+function removeFromFavorites(chosenGIF) {
+  var display = chosenGIF.split(" ")[0];
+  var id = chosenGIF.split(" ")[1];
+  
+  var index = favoritesArray.indexOf(display);
+  if (index !== -1) {
+      favoritesArray.splice(index, 1);
+      var current = "#" + id;
+      $(current).remove();
+  }
 }
 
 // this calls the function that will render the buttons
