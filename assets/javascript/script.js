@@ -1,6 +1,13 @@
+/***********************************************
+ * @author Jennifer Grace
+ * UNHBootCamp
+ * JavaScript file for Super Hero Gif Generator
+ ***********************************************/
+
 // Initial array of topics
 var topics = ["Captain Marvel", "Captain America", "Black Widow", "Scarlett Witch", "Thor", "Iron Man", "Ant Man", "Black Panther"];
 var favoritesArray =[];
+var action;
 
 // variables
 var buttonsDiv = $("#buttons");
@@ -73,12 +80,14 @@ $(document).on("click", ".favorite", function () {
     $(this).removeAttr("class", "glyphicon-star-empty");
     $(this).addClass("favorite btn btn-default btn-lg glyphicon glyphicon-star")
     $(this).attr("data-state", "filled");
-    addToFavorites(chosenGIF);
+    action = "add";
+    changeFavorites(chosenGIF, action);
   } else {
     $(this).removeAttr("class", "glyphicon-star");
     $(this).addClass("favorite btn btn-default btn-lg glyphicon glyphicon-star-empty")
     $(this).attr("data-state", "empty");
-    removeFromFavorites(chosenGIF);
+    action = "remove";
+    changeFavorites(chosenGIF, action);
   }
   
 });
@@ -114,26 +123,24 @@ function buildGifCards(currentGif) {
   gifView.prepend(columnDiv);
 }
 
-function addToFavorites(chosenGIF) {
+function changeFavorites(chosenGIF, action) {
   var display = chosenGIF.split(" ")[0];
   var id = chosenGIF.split(" ")[1];
 
-  if(!favoritesArray.includes(display)) {
-    favoritesArray.push(display)
-    var favorite = $("<p>", { id: id, text: display })
-    favoritesDiv.append(favorite)
+  if (action === "add") {
+    if(!favoritesArray.includes(display)) {
+      favoritesArray.push(display)
+      var favorite = $("<p>", { id: id, text: display })
+      favoritesDiv.append(favorite)
+    }
   }
-}
-
-function removeFromFavorites(chosenGIF) {
-  var display = chosenGIF.split(" ")[0];
-  var id = chosenGIF.split(" ")[1];
-  
-  var index = favoritesArray.indexOf(display);
-  if (index !== -1) {
-      favoritesArray.splice(index, 1);
-      var current = "#" + id;
-      $(current).remove();
+  else {
+    var index = favoritesArray.indexOf(display);
+    if (index !== -1) {
+        favoritesArray.splice(index, 1);
+        var current = "#" + id;
+        $(current).remove();
+    }
   }
 }
 

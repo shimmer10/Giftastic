@@ -1,4 +1,10 @@
-body {
+/***********************************************
+ * @author Jennifer Grace
+ * UNHBootCamp
+ * CSS for Super Hero Gif Generator
+ ***********************************************/
+ 
+ body {
     background-image: url("../images/background.jpg");
     background-size: auto;
 }
@@ -13,7 +19,7 @@ body {
     margin: 5px;
 }
 .jumbotron {
-    background-image: url("../images/Superhero\ GIF\ Generator\ Banner.png");
+    background-image: url("../images/SuperheroGIFGeneratorBanner.png");
     height: 195px;
 }
 #favorites {
