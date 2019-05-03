@@ -15,6 +15,11 @@
     margin-right: auto;
     width: 36rem;
 }
+.favorite-image {
+    width: 200px;
+    height: 150px;
+    margin-bottom: 10px;
+}
 .gif-button {
     margin: 5px;
 }
@@ -36,5 +41,6 @@
 }
 #topic-input {
     text-align: center;
+    margin-top: 15px;
     margin-left: 10px;
 }

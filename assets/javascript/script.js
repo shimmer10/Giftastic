@@ -6,8 +6,9 @@
 
 // Initial array of topics
 var topics = ["Captain Marvel", "Captain America", "Black Widow", "Scarlett Witch", "Thor", "Iron Man", "Ant Man", "Black Panther"];
-var favoritesArray =[];
+var favoritesArray = [];
 var action;
+var isFavorite = false;
 
 // variables
 var buttonsDiv = $("#buttons");
@@ -44,18 +45,7 @@ $(document).on("click", ".gif-button", function () {
   var apiKey = "t96GtYlvYbboFox2HkQ71NeemLbAHcQr";
   var giphyURL = "https://api.giphy.com/v1/gifs/search?q=" + currentTopic + "&api_key=" + apiKey + "&limit=10";
 
-  $.ajax({
-    url: giphyURL,
-    method: "GET"
-  }).then(function (response) {
-
-    var results = response.data;
-
-    for (var i = 0; i < results.length; i++) {
-      var currentGif = results[i];
-      buildGifCards(currentGif);
-    }
-  });
+  callAjax(giphyURL);
 });
 
 // this will change the gif state when user clicks it
@@ -89,38 +79,66 @@ $(document).on("click", ".favorite", function () {
     action = "remove";
     changeFavorites(chosenGIF, action);
   }
-  
+
 });
 
-function buildGifCards(currentGif) {
+function callAjax(giphyURL, isFavorite) {
+  $.ajax({
+    url: giphyURL,
+    method: "GET"
+  }).then(function (response) {
 
+    var results = response.data;
+
+    if (!isFavorite) {
+      for (var i = 0; i < results.length; i++) {
+        var currentGif = results[i];
+        buildGifCards(currentGif, isFavorite);
+      }
+    }
+    else {
+      buildGifCards(results, isFavorite);
+    }
+
+  });
+}
+
+function buildGifCards(currentGif, isFavorite) {
+  console.log("how about this isFavorite: " + isFavorite)
   var stillImage = currentGif.images.original_still.url;
   var movingImage = currentGif.images.fixed_height.url;
   var rating = currentGif.rating;
   var title = currentGif.title;
   var id = currentGif.id;
 
-  var columnDiv = $("<div/>", { class: "col-lg-6" });
-  var favoriteButton = $("<button>").addClass("favorite card-header btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
-    .attr("id", movingImage + " " + id)
-    .attr("data-state", "empty");
-  var gifCard = $("<div>", { class: "card mt-25 mb-25" });
-  var gifImage = $("<img>").addClass("card-img-bottom gif")
-    .attr("src", stillImage)
-    .attr("data-state", "still")
-    .attr("data-still", stillImage)
-    .attr("data-animate", movingImage);
-  var gifDiv = $("<div>", { class: "card-body" });
-  var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
-  var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
+  if (!isFavorite) {
+    var columnDiv = $("<div/>", { class: "col-lg-6" });
+    var favoriteButton = $("<button>").addClass("favorite card-header btn btn-default btn-lg glyphicon glyphicon-star-empty empty")
+      .attr("id", movingImage + " " + id)
+      .attr("data-state", "empty");
+    var gifCard = $("<div>", { class: "card mt-25 mb-25" });
+    var gifImage = $("<img>").addClass("card-img-bottom gif")
+      .attr("src", stillImage)
+      .attr("data-state", "still")
+      .attr("data-still", stillImage)
+      .attr("data-animate", movingImage);
+    var gifDiv = $("<div>", { class: "card-body" });
+    var rating = $("<p>", { class: "card-text", text: "GIF Rating: " + rating })
+    var title = $("<p>", { class: "card-text", text: "GIF Title: " + title })
 
-  rating.appendTo(gifDiv);
-  title.appendTo(gifDiv);
-  favoriteButton.appendTo(gifCard);
-  gifImage.appendTo(gifCard);
-  gifDiv.appendTo(gifCard);
-  gifCard.appendTo(columnDiv)
-  gifView.prepend(columnDiv);
+    rating.appendTo(gifDiv);
+    title.appendTo(gifDiv);
+    favoriteButton.appendTo(gifCard);
+    gifImage.appendTo(gifCard);
+    gifDiv.appendTo(gifCard);
+    gifCard.appendTo(columnDiv)
+    gifView.prepend(columnDiv);
+  }
+  else {
+    var favorite = $("<img>", { id: id, class: "favorite-image", src: movingImage })
+
+    favoritesDiv.append(favorite)
+  }
 }
 
 function changeFavorites(chosenGIF, action) {
@@ -128,18 +146,20 @@ function changeFavorites(chosenGIF, action) {
   var id = chosenGIF.split(" ")[1];
 
   if (action === "add") {
-    if(!favoritesArray.includes(display)) {
+    if (!favoritesArray.includes(display)) {
       favoritesArray.push(display)
-      var favorite = $("<p>", { id: id, text: display })
-      favoritesDiv.append(favorite)
+
+      var apiKey = "t96GtYlvYbboFox2HkQ71NeemLbAHcQr";
+      var giphyURL = "https://api.giphy.com/v1/gifs/" + id + "?api_key=" + apiKey;
+      callAjax(giphyURL, true)
     }
   }
   else {
     var index = favoritesArray.indexOf(display);
     if (index !== -1) {
-        favoritesArray.splice(index, 1);
-        var current = "#" + id;
-        $(current).remove();
+      favoritesArray.splice(index, 1);
+      var current = "#" + id;
+      $(current).remove();
     }
   }
 }
