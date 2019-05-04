@@ -8,6 +8,10 @@
     background-image: url("../images/background.jpg");
     background-size: auto;
 }
+h1, h3 {
+    color: white !important;
+    font-family: 'Architects Daughter', cursive !important;
+}
 .card {
     margin-top: 25px;
     margin-bottom: 25px;
