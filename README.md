@@ -1,8 +1,9 @@
 # Giftastic
 
-![Harry Potter Trivia Game](./assets/images/SuperheroGIFGeneratorBanner.png)
+![Giftastic gif Generator](./assets/images/SuperheroGIFGeneratorBanner.png)
 
 ## **This page is designed to pull gifs for the user based on input**
+## *https://shimmer10.github.io/Giftastic/*
 
 ### **The page starts with predefined topic buttons**
      * If the user clicks an existing button, ten gifs related to the topic will appear
